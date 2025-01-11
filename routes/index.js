@@ -1,6 +1,8 @@
 const routes = require("express").Router();
-const baseController = require("../controllers");
+const indexController = require("../controllers/index");
 
-routes.get("/", baseController.getName);
+// Web page routes
+routes.get("/", indexController.stephanieRoute);
+routes.get("/Dallin", indexController.dallinRoute);
 
 module.exports = routes;
