@@ -21,6 +21,7 @@
   "homepage": "https://github.com/lvisnaw/cse341-a2#readme",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongodb": "^6.12.0"
   },
