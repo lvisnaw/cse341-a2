@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Update a contact
-PUT http://localhost:3000/api/contacts/679547435fe2f4b15fd487f5
+PUT http://localhost:3000/api/contacts/6795799b7d2f7b6db9cd8e9a
 Content-Type: application/json
 
 {
@@ -37,4 +37,4 @@ Content-Type: application/json
 }
 
 ### Delete a contact
-DELETE http://localhost:3000/api/contacts/67954d7d95726da1c77f4e93
+DELETE http://localhost:3000/api/contacts/679572b783df4bc4ebf52578
