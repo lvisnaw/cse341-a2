@@ -10,7 +10,7 @@ let _db; // A variable to store the DB connection once it's established
 const initDb = async (callback) => {
   // If `_db` is already set, database is already initialized
   if (_db) {
-    console.log("Database is already initialized!");
+    console.log('Database is already initialized!');
     return callback(null, _db);
   }
 
@@ -22,15 +22,16 @@ const initDb = async (callback) => {
 
     // Create a new MongoClient using the URI from .env
     const client = new MongoClient(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000, // 5 seconds timeout
+      serverSelectionTimeoutMS: 10000, // 10 seconds timeout
+      socketTimeoutMS: 200000, // 20 seconds socket timeout
     });
 
     // Connect to MongoDB
     await client.connect();
-    console.log("Connected to MongoDB!");
+    console.log('Connected to MongoDB!');
 
     // Select the database (ensure the name matches your MongoDB setup)
-    _db = client.db("contacts"); // Use contacts db
+    _db = client.db('contacts'); // Use contacts db
     console.log(`Database selected: ${_db.databaseName}`);
 
     // Pass the db to the callback to confirm successful initialization
@@ -48,7 +49,7 @@ const initDb = async (callback) => {
  */
 const getDb = () => {
   if (!_db) {
-    throw new Error("Database not initialized");
+    throw new Error('Database not initialized');
   }
   return _db;
 };
