@@ -21,7 +21,9 @@ initDb((err) => {
 
     // Start listening—this keeps Node running
     app.listen(port, () => {
-      console.log(`Web Server is listening on port ${port} http://localhost:3000/`);
+      console.log(
+        `Web Server is listening on port ${port} http://localhost:3000/`
+      );
     });
   }
 });

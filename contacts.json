@@ -1,24 +1,23 @@
 [
-    {
-      "firstName": "Stephanie",
-      "lastName": "Visnaw",
-      "email": "visnaw@gmail.com",
-      "favoriteColor": "Blue",
-      "birthday": "1971-12-11"
-    },
-    {
-      "firstName": "Dallin",
-      "lastName": "Visnaw",
-      "email": "djvisnaw@gmail.com",
-      "favoriteColor": "Green",
-      "birthday": "1997-06-12"
-    },
-    {
-      "firstName": "Jayden",
-      "lastName": "Visnaw",
-      "email": "jbvisnaw@gmail.com",
-      "favoriteColor": "Turquoise Blue",
-      "birthday": "2000-03-18"
-    }
-  ]
-  
+  {
+    "firstName": "Stephanie",
+    "lastName": "Visnaw",
+    "email": "visnaw@gmail.com",
+    "favoriteColor": "Blue",
+    "birthday": "1971-12-11"
+  },
+  {
+    "firstName": "Dallin",
+    "lastName": "Visnaw",
+    "email": "djvisnaw@gmail.com",
+    "favoriteColor": "Green",
+    "birthday": "1997-06-12"
+  },
+  {
+    "firstName": "Jayden",
+    "lastName": "Visnaw",
+    "email": "jbvisnaw@gmail.com",
+    "favoriteColor": "Turquoise Blue",
+    "birthday": "2000-03-18"
+  }
+]

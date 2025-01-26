@@ -14,11 +14,11 @@ export default [
       },
     },
     rules: {
-      'semi': ['error', 'always'], // Enforce semicolons
-      'quotes': ['error', 'single'], // Enforce single quotes
+      semi: ['error', 'always'], // Enforce semicolons
+      quotes: ['error', 'single'], // Enforce single quotes
       'no-unused-vars': 'warn', // Warn for unused variables
       'no-console': 'off', // Allow console statements (useful for Node.js)
-      'eqeqeq': ['error', 'always'], // Enforce strict equality checks
+      eqeqeq: ['error', 'always'], // Enforce strict equality checks
     },
   },
   pluginJs.configs.recommended, // Extend ESLint's recommended rules
