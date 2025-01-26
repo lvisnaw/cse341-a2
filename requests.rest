@@ -38,3 +38,29 @@ Content-Type: application/json
 
 ### Delete a contact
 DELETE http://localhost:3000/api/contacts/679572b783df4bc4ebf52578
+
+
+### On live service render.com
+
+### Create Contact
+POST https://cse341-a2-6vuv.onrender.com/api/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Jimmy Joe",
+    "lastName": "Johnson",
+    "email": "jjjw@gmail.com",
+    "favoriteColor": "Red",
+    "birthday": "2002-05-12"
+}
+
+### Update Contact
+PUT https://cse341-a2-6vuv.onrender.com/api/contacts/67957eb9a390ae3ad65bc8eb
+Content-Type: application/json
+
+{
+    "favoriteColor": "Pink"
+}
+
+### Delete Contact
+DELETE https://cse341-a2-6vuv.onrender.com/api/contacts/6795799b7d2f7b6db9cd8e9a
