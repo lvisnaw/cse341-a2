@@ -42,12 +42,18 @@ DELETE http://localhost:3000/api/contacts/67958358f3d92e6da5039ce8
 
 ### Links for testing live server on render.com
 
+### Get All Contacts
+GET https://cse341-a2-lesson4.onrender.com/api/contacts/
+
+### Get Contact by ID
+GET https://cse341-a2-lesson4.onrender.com/api/contacts/679547435fe2f4b15fd487f5
+
 ### Create Contact
-POST https://cse341-a2-6vuv.onrender.com/api/contacts
+POST https://cse341-a2-lesson4.onrender.com/api/contacts
 Content-Type: application/json
 
 {
-    "firstName": "Jimmy Joe V",
+    "firstName": "Jimmy Joe VI",
     "lastName": "Johnson",
     "email": "jjjw@gmail.com",
     "favoriteColor": "Red",
@@ -55,7 +61,7 @@ Content-Type: application/json
 }
 
 ### Update Contact
-PUT https://cse341-a2-6vuv.onrender.com/api/contacts/67958b7a3e38ca8ec902837d
+PUT https://cse341-a2-lesson4.onrender.com/api/contacts/<ID>
 Content-Type: application/json
 
 {
@@ -63,4 +69,4 @@ Content-Type: application/json
 }
 
 ### Delete Contact
-DELETE https://cse341-a2-6vuv.onrender.com/api/contacts/67958b7a3e38ca8ec902837d
+DELETE https://cse341-a2-lesson4.onrender.com/api/contacts/<ID>

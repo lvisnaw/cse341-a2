@@ -2,12 +2,15 @@ const express = require('express');
 const { initDb } = require('./db/connection');
 const routes = require('./routes'); // Keep this for the existing routes
 const contactsRouter = require('./routes/contacts'); // Add this for contacts routes
+const setupSwagger = require('./swagger');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware for parsing JSON
 app.use(express.json());
+
+setupSwagger(app);
 
 // Initialize the DB, then start the server
 initDb((err) => {
