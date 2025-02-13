@@ -1,4 +1,4 @@
-// const swaggerJSDoc = require('swagger-jsdoc');
+// const swaggerJsdoc = require('swagger-jsdoc');
 // const swaggerUi = require('swagger-ui-express');
 
 // const options = {
@@ -7,56 +7,33 @@
 //     info: {
 //       title: 'Contacts API',
 //       version: '1.0.0',
-//       description: 'API documentation for managing contacts',
+//       description: 'API for managing contacts',
 //     },
-//     servers: [
-//       {
-//         url: 'http://localhost:3000', // Change this to your Render URL when deployed
-//         description: 'Local development server',
-//       },
-//     ],
 //   },
-//   apis: ['./routes/*.js'], // Path to API route files
+//   apis: ['./routes/*.js'], // Adjust the path if necessary
 // };
 
-// const swaggerSpec = swaggerJSDoc(options);
+// // Initialize Swagger
+// const specs = swaggerJsdoc(options);
 
 // const setupSwagger = (app) => {
-//   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-//   console.log('Swagger docs available at http://localhost:3000/api-docs');
-// };
+//   app.use('/api-docs', (req, res, next) => {
+//     const protocol = req.headers['x-forwarded-proto'] || req.protocol; // Detect HTTP or HTTPS
+//     const host = req.headers.host; // Get the current domain name
 
-// module.exports = setupSwagger;
-
-// const swaggerJSDoc = require('swagger-jsdoc');
-// const swaggerUi = require('swagger-ui-express');
-
-// const isLocal = process.env.NODE_ENV !== 'production'; // Check if in local dev mode
-// const serverUrl = isLocal ? 'http://localhost:3000' : 'https://cse341-a2-lesson6.onrender.com'; // Use Render in production
-
-// const options = {
-//   definition: {
-//     openapi: '3.0.0',
-//     info: {
-//       title: 'Contacts API',
-//       version: '1.0.0',
-//       description: 'API documentation for managing contacts',
-//     },
-//     servers: [
+//     const servers = [
 //       {
-//         url: serverUrl, // Dynamically select the server
-//         description: isLocal ? 'Local development server' : 'Production server',
+//         url: `${protocol}://${host}`, // Dynamically set the correct base URL
+//         description: host.includes('localhost') ? 'Local development server' : 'Live API on Render',
 //       },
-//     ],
-//   },
-//   apis: ['./routes/*.js'], // Path to API route files
-// };
+//     ];
 
-// const swaggerSpec = swaggerJSDoc(options);
+//     // Attach dynamic servers to Swagger definition
+//     specs.servers = servers;
+//     next();
+//   });
 
-// const setupSwagger = (app) => {
-//   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-//   console.log(`Swagger docs available at ${serverUrl}/api-docs`);
+//   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // };
 
 // module.exports = setupSwagger;
@@ -73,10 +50,10 @@ const options = {
       description: 'API for managing contacts',
     },
   },
-  apis: ['./routes/*.js'], // Adjust the path if necessary
+  apis: ['./routes/*.js'], // Adjust this path if necessary
 };
 
-// Initialize Swagger
+// Initialize Swagger specs
 const specs = swaggerJsdoc(options);
 
 const setupSwagger = (app) => {
@@ -84,19 +61,26 @@ const setupSwagger = (app) => {
     const protocol = req.headers['x-forwarded-proto'] || req.protocol; // Detect HTTP or HTTPS
     const host = req.headers.host; // Get the current domain name
 
-    const servers = [
+    // ✅ Dynamically determine the server environment description
+    const environment = host.includes('localhost')
+      ? 'Local development server'
+      : `Live API (${host})`; // Show the actual live host dynamically
+
+    // ✅ Ensure the `servers` array is dynamically updated
+    specs.servers = [
       {
-        url: `${protocol}://${host}`, // Dynamically set the correct base URL
-        description: host.includes('localhost') ? 'Local development server' : 'Live API on Render',
+        url: `${protocol}://${host}`, // Auto-detects the correct URL
+        description: environment, // ✅ Adds back the environment description
       },
     ];
 
-    // Attach dynamic servers to Swagger definition
-    specs.servers = servers;
     next();
   });
 
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+  // ✅ Serve Swagger UI after updating `specs.servers`
+  app.use('/api-docs', swaggerUi.serve, (req, res, next) => {
+    swaggerUi.setup(specs)(req, res, next);
+  });
 };
 
 module.exports = setupSwagger;
