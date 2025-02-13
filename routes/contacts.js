@@ -64,13 +64,21 @@ router.get('/:id', async (req, res, next) => {
     if (!ObjectId.isValid(id)) {
       const error = new Error('Invalid ID format');
       error.status = 400;
-      throw error; 
+      throw error;
     }
 
-    const contact = await getContactById(id);
+    const db = getDb();
+    const contact = await db.collection(collectionName).findOne({ _id: new ObjectId(id) });
+
+    if (!contact) {
+      const error = new Error('Contact not found');
+      error.status = 404; // ✅ Ensure 404 instead of 500
+      throw error;
+    }
+
     res.status(200).json(contact);
   } catch (error) {
-    next(error); 
+    next(error); // ✅ Now passes proper status codes
   }
 });
 
