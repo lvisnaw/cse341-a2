@@ -56,15 +56,21 @@ router.get('/', async (req, res) => {
  *       404:
  *         description: Contact not found
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // ✅ Ensure proper ID validation before calling DB query
+    if (!ObjectId.isValid(id)) {
+      const error = new Error('Invalid ID format');
+      error.status = 400;
+      throw error; 
+    }
+
     const contact = await getContactById(id);
     res.status(200).json(contact);
   } catch (error) {
-    console.error('Error fetching contact by ID:', error.message);
-    const statusCode = error.message === 'Invalid ID format' ? 400 : 404;
-    res.status(statusCode).json({ message: error.message });
+    next(error); 
   }
 });
 
@@ -109,13 +115,12 @@ router.get('/:id', async (req, res) => {
  *       400:
  *         description: Missing required fields
  */
-router.post('/', validateContact, async (req, res) => {
+router.post('/', validateContact, async (req, res, next) => {
   try {
     const db = getDb();
 
-    // ✅ Ensure birthday is stored as YYYY-MM-DD (string) instead of Date object
     if (req.body.birthday) {
-      req.body.birthday = req.body.birthday.toISOString().split('T')[0]; // Extract date only
+      req.body.birthday = new Date(req.body.birthday).toISOString().split('T')[0]; // Extract date only
     }
 
     const result = await db.collection(collectionName).insertOne(req.body);
@@ -123,11 +128,10 @@ router.post('/', validateContact, async (req, res) => {
     if (result.acknowledged) {
       res.status(201).json({ id: result.insertedId, message: 'Contact created successfully' });
     } else {
-      res.status(500).json({ message: 'Failed to create contact' });
+      throw new Error('Failed to create contact'); 
     }
   } catch (error) {
-    console.error('Error creating contact:', error.message);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    next(error); 
   }
 });
 
@@ -181,18 +185,19 @@ router.post('/', validateContact, async (req, res) => {
  *       404:
  *         description: Contact not found
  */
-router.put('/:id', validateContact, async (req, res) => {
+router.put('/:id', validateContact, async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid ID format' });
+      const error = new Error('Invalid ID format');
+      error.status = 400;
+      throw error;
     }
 
     const db = getDb();
 
-    // ✅ Ensure birthday is stored as YYYY-MM-DD (string) instead of Date object
     if (req.body.birthday) {
-      req.body.birthday = req.body.birthday.toISOString().split('T')[0]; // Extract date only
+      req.body.birthday = new Date(req.body.birthday).toISOString().split('T')[0]; // Extract date only
     }
 
     const result = await db.collection(collectionName).updateOne(
@@ -201,15 +206,17 @@ router.put('/:id', validateContact, async (req, res) => {
     );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ message: 'Contact not found' });
+      const error = new Error('Contact not found');
+      error.status = 404;
+      throw error;
     }
 
     res.status(200).json({ message: 'Contact updated successfully' });
   } catch (error) {
-    console.error('Error updating contact:', error.message);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    next(error); // ✅ Send the error to the global error handler
   }
 });
+
 
 /**
  * @swagger
@@ -232,25 +239,29 @@ router.put('/:id', validateContact, async (req, res) => {
  *       404:
  *         description: Contact not found
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid ID format' });
+      const error = new Error('Invalid ID format');
+      error.status = 400;
+      throw error;
     }
 
     const db = getDb();
     const result = await db.collection(collectionName).deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ message: 'Contact not found' });
+      const error = new Error('Contact not found');
+      error.status = 404;
+      throw error;
     }
 
     res.status(200).json({ message: 'Contact deleted successfully' });
   } catch (error) {
-    console.error('Error deleting contact:', error.message);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    next(error); // ✅ Send the error to the global error handler
   }
 });
+
 
 module.exports = router;

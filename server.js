@@ -22,6 +22,24 @@ initDb((err) => {
     app.use('/', routes); // Existing routes
     app.use('/api/contacts', contactsRouter); // New contacts API routes
 
+    // ✅ Global Error Handling Middleware
+    app.use((err, req, res, next) => {
+      console.error('Global Error Handler:', err.stack); // Log error for debugging
+    
+      // Prevent ESLint warning by "using" next without changing logic
+      next();
+    
+      // Set default status code to 500 if not provided
+      const statusCode = err.status || 500;
+      res.status(statusCode).json({
+        error: {
+          message: err.message || 'Internal Server Error',
+          status: statusCode,
+        },
+      });
+    });
+    
+
     // Start listening—this keeps Node running
     app.listen(port, () => {
       console.log(
